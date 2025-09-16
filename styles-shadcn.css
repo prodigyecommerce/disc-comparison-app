@@ -12,7 +12,7 @@
     --card-foreground: 220 13% 18%; /* Space Black */
     --popover: 0 0% 100%;
     --popover-foreground: 220 13% 18%; /* Space Black */
-    --primary: 158 64% 52%; /* Aurora Green */
+    --primary: 138 100% 39%; /* Aurora Green #00c756 */
     --primary-foreground: 0 0% 100%; /* Pure White */
     --secondary: 220 13% 91%; /* Aries Gray */
     --secondary-foreground: 220 13% 18%; /* Space Black */
@@ -24,11 +24,11 @@
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 91%; /* Aries Gray */
     --input: 220 13% 91%; /* Aries Gray */
-    --ring: 158 64% 52%; /* Aurora Green */
+    --ring: 138 100% 39%; /* Aurora Green #00c756 */
     --radius: 0.5rem;
     
     /* Brand Colors */
-    --aurora-green: 158 64% 52%;
+    --aurora-green: 138 100% 39%; /* #00c756 */
     --space-black: 220 13% 18%;
     --pure-white: 0 0% 100%;
     --lunar-gray: 220 9% 46%;
@@ -43,7 +43,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 220 13% 18%;
     --popover-foreground: 0 0% 98%;
-    --primary: 158 64% 52%; /* Aurora Green */
+    --primary: 138 100% 39%; /* Aurora Green #00c756 */
     --primary-foreground: 220 13% 18%;
     --secondary: 220 9% 46%;
     --secondary-foreground: 0 0% 98%;
@@ -55,7 +55,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 220 9% 46%;
     --input: 220 9% 46%;
-    --ring: 158 64% 52%;
+    --ring: 138 100% 39%; /* Aurora Green #00c756 */
   }
 }
 
