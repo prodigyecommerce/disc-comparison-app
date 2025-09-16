@@ -97,7 +97,9 @@
   
   
   .search-dropdown {
-    @apply absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-2 shadow-lg max-h-64 overflow-y-auto z-50;
+    @apply absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-2 shadow-xl max-h-64 overflow-y-auto;
+    z-index: 9999;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
   
   .search-result-item {
