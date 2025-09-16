@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import "https://use.typekit.net/rcm1yks.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 13% 18%; /* Space Black */
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 18%; /* Space Black */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 18%; /* Space Black */
+    --primary: 158 64% 52%; /* Aurora Green */
+    --primary-foreground: 0 0% 100%; /* Pure White */
+    --secondary: 220 13% 91%; /* Aries Gray */
+    --secondary-foreground: 220 13% 18%; /* Space Black */
+    --muted: 220 13% 91%; /* Aries Gray */
+    --muted-foreground: 220 9% 46%; /* Lunar Gray */
+    --accent: 220 13% 91%; /* Aries Gray */
+    --accent-foreground: 220 13% 18%; /* Space Black */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 91%; /* Aries Gray */
+    --input: 220 13% 91%; /* Aries Gray */
+    --ring: 158 64% 52%; /* Aurora Green */
+    --radius: 0.5rem;
+    
+    /* Brand Colors */
+    --aurora-green: 158 64% 52%;
+    --space-black: 220 13% 18%;
+    --pure-white: 0 0% 100%;
+    --lunar-gray: 220 9% 46%;
+    --aries-gray: 220 13% 91%;
+    --sundial-yellow: 48 96% 53%;
+  }
+
+  .dark {
+    --background: 220 13% 18%; /* Space Black */
+    --foreground: 0 0% 98%;
+    --card: 220 13% 18%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 13% 18%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 158 64% 52%; /* Aurora Green */
+    --primary-foreground: 220 13% 18%;
+    --secondary: 220 9% 46%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 9% 46%;
+    --muted-foreground: 220 13% 91%;
+    --accent: 220 9% 46%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 9% 46%;
+    --input: 220 9% 46%;
+    --ring: 158 64% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "neue-haas-grotesk-text", "Inter", sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "neue-haas-grotesk-display", "Inter", sans-serif;
+    font-weight: 600; /* Semi-Bold */
+  }
+}
+
+/* Custom Components */
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+  }
+  
+  .grain-texture {
+    position: relative;
+  }
+  
+  .grain-texture::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  
+  
+  .search-dropdown {
+    @apply absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg mt-2 shadow-lg max-h-64 overflow-y-auto z-50;
+  }
+  
+  .search-result-item {
+    @apply px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0;
+  }
+  
+  .flight-number-badge {
+    @apply inline-flex items-center justify-center min-w-[2rem] h-6 px-2 text-xs font-semibold rounded-md bg-muted text-muted-foreground;
+  }
+}

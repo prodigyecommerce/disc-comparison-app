@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prodigy Disc Comparison Tool</title>
+    <link rel="stylesheet" href="dist/styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="font-sans antialiased">
+    <!-- Hero Section with Search -->
+    <section class="relative py-12 md:py-16 text-white overflow-hidden" style="background-color: #1e1e1e;">
+        <div class="absolute inset-0 grain-texture"></div>
+        <div class="container px-4 md:px-6 relative z-10">
+            <div class="flex flex-col items-center text-center space-y-8 max-w-4xl mx-auto">
+                <div class="space-y-4">
+                    <h1 class="text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight">
+                        Find Your Perfect Prodigy Disc
+                    </h1>
+                    <p class="text-base md:text-lg text-white/90 max-w-2xl leading-relaxed">
+                        Search any PDGA approved disc and discover the ideal Prodigy match based on flight characteristics
+                    </p>
+                </div>
+                
+                <!-- Search Bar in Header -->
+                <div class="w-full max-w-2xl space-y-4">
+                    <!-- Loading State -->
+                    <div class="hidden" id="loadingIndicator">
+                        <div class="flex items-center justify-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                            <span class="text-white/90 text-sm">Loading disc data...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Input -->
+                    <div class="relative" id="searchContainer">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i data-lucide="search" class="h-5 w-5 text-muted-foreground"></i>
+                            </div>
+                            <input 
+                                type="text" 
+                                id="discSearch" 
+                                class="flex h-14 w-full rounded-lg border-0 bg-white/95 backdrop-blur-sm pl-12 pr-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 shadow-lg"
+                                placeholder="Search for any PDGA approved disc..."
+                                autocomplete="off"
+                                role="combobox"
+                                aria-expanded="false"
+                                aria-haspopup="listbox"
+                            >
+                        </div>
+                        
+                        <!-- Search Results Dropdown -->
+                        <div id="searchResults" class="search-dropdown hidden" role="listbox"></div>
+                    </div>
+                    
+                    <!-- Search Tips -->
+                    <p class="text-sm text-white/80">
+                        Try searching for discs like "Destroyer", "Buzzz", or "Teebird"
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-2 text-sm font-medium bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
+                    <i data-lucide="database" class="w-4 h-4"></i>
+                    <span>Powered by live Google Sheets data</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section id="comparisonResults" class="py-16 bg-muted/20 hidden" aria-live="polite">
+        <div class="container px-4 md:px-6">
+            <div class="grid lg:grid-cols-[1fr_2fr] gap-8 max-w-7xl mx-auto">
+                
+                <!-- Selected Disc Card -->
+                <div class="bg-card text-card-foreground rounded-xl border shadow-sm p-6 lg:sticky lg:top-6 h-fit">
+                    <div class="mb-4">
+                        <h2 class="text-lg font-semibold">Your Disc</h2>
+                        <p class="text-sm text-muted-foreground">You searched for:</p>
+                    </div>
+                    <div id="selectedDisc" class="p-4 bg-muted/50 rounded-lg border"></div>
+                </div>
+
+                <!-- Recommendations Panel -->
+                <div class="space-y-6">
+                    <div class="bg-card text-card-foreground rounded-xl border shadow-sm p-6">
+                        <h2 class="text-xl font-semibold mb-6">Prodigy Recommendations</h2>
+                        
+                        <!-- Best Match -->
+                        <div class="mb-8">
+                            <div class="flex items-center justify-between p-3 rounded-lg border-2 border-primary/20 bg-primary/5 mb-4">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="star" class="w-4 h-4 text-primary"></i>
+                                    <span class="text-sm font-semibold text-primary">Best Match</span>
+                                </div>
+                                <span class="inline-flex items-center rounded-full bg-primary text-primary-foreground px-3 py-1 text-xs font-semibold" id="bestMatchPercentage">100%</span>
+                            </div>
+                            <div id="bestMatch" class="bg-primary/5 border border-primary/20 rounded-lg p-6 hover:bg-primary/10 transition-colors"></div>
+                        </div>
+
+                        <!-- Alternative Options -->
+                        <div>
+                            <h3 class="text-base font-semibold mb-4 text-muted-foreground">Alternative Options</h3>
+                            <div class="space-y-3">
+                                <div id="alternative1"></div>
+                                <div id="alternative2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/utils.js"></script>
+    <script src="config.js"></script>
+    <script src="js/google-sheets-service.js"></script>
+    <script src="js/data-service.js"></script>
+    <script src="data/pdga-discs.js"></script>
+    <script src="data/prodigy-discs.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/comparison.js"></script>
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Initialize Lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

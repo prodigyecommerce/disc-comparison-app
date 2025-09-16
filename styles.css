@@ -1,0 +1,868 @@
+/* Modern CSS Reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+:root {
+    /* Brand Colors from Style Guide */
+    --aurora-green: #00C756;
+    --space-black: #1E1E1E;
+    --pure-white: #FFFFFF;
+    --lunar-gray: #636666;
+    --aries-gray: #C0C0C0;
+    --sundial-yellow: #F78E28;
+    
+    /* Extended Color Palette */
+    --primary-50: #F0FDF4;
+    --primary-100: #DCFCE7;
+    --primary-500: var(--aurora-green);
+    --primary-600: #00A84A;
+    --primary-700: #008B3A;
+    
+    --gray-50: #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-400: #94A3B8;
+    --gray-500: var(--lunar-gray);
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1E293B;
+    --gray-900: var(--space-black);
+    
+    /* Spacing System (8px base) */
+    --space-1: 0.25rem;   /* 4px */
+    --space-2: 0.5rem;    /* 8px */
+    --space-3: 0.75rem;   /* 12px */
+    --space-4: 1rem;      /* 16px */
+    --space-5: 1.25rem;   /* 20px */
+    --space-6: 1.5rem;    /* 24px */
+    --space-8: 2rem;      /* 32px */
+    --space-10: 2.5rem;   /* 40px */
+    --space-12: 3rem;     /* 48px */
+    --space-16: 4rem;     /* 64px */
+    --space-20: 5rem;     /* 80px */
+    --space-24: 6rem;     /* 96px */
+    --space-32: 8rem;     /* 128px */
+    
+    /* Typography Scale */
+    --text-xs: 0.75rem;    /* 12px */
+    --text-sm: 0.875rem;   /* 14px */
+    --text-base: 1rem;     /* 16px */
+    --text-lg: 1.125rem;   /* 18px */
+    --text-xl: 1.25rem;    /* 20px */
+    --text-2xl: 1.5rem;    /* 24px */
+    --text-3xl: 1.875rem;  /* 30px */
+    --text-4xl: 2.25rem;   /* 36px */
+    --text-5xl: 3rem;      /* 48px */
+    --text-6xl: 3.75rem;   /* 60px */
+    --text-7xl: 4.5rem;    /* 72px */
+    
+    /* Border Radius */
+    --radius-sm: 0.375rem;   /* 6px */
+    --radius-md: 0.5rem;     /* 8px */
+    --radius-lg: 0.75rem;    /* 12px */
+    --radius-xl: 1rem;       /* 16px */
+    --radius-2xl: 1.5rem;    /* 24px */
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 350ms ease;
+}
+
+/* Base Styles */
+body {
+    font-family: "neue-haas-grotesk-text", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--gray-900);
+    background-color: var(--gray-50);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography System */
+h1, h2 {
+    font-family: "rama-gothic-m", sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+}
+
+h3, h4, h5, h6 {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.3;
+}
+
+p, span, div, input, button {
+    font-family: "neue-haas-grotesk-text", sans-serif;
+}
+
+/* Layout Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--pure-white) 100%);
+    padding: var(--space-20) 0 var(--space-16);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="0.5" fill="%2300C756" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--space-6);
+}
+
+.hero-title {
+    font-size: clamp(var(--text-4xl), 8vw, var(--text-7xl));
+    color: var(--primary-500);
+    margin-bottom: var(--space-6);
+    background: linear-gradient(135deg, var(--primary-500), var(--primary-700));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: var(--text-xl);
+    color: var(--gray-600);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Search Section */
+.search-section {
+    padding: var(--space-12) 0;
+    background: var(--pure-white);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.search-wrapper {
+    max-width: 640px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Loading State */
+.loading-state {
+    text-align: center;
+    padding: var(--space-8);
+    background: var(--pure-white);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-6);
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto var(--space-4);
+    border: 3px solid var(--gray-200);
+    border-top: 3px solid var(--primary-500);
+    border-radius: var(--radius-full);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: var(--gray-600);
+    font-size: var(--text-sm);
+    font-weight: 500;
+}
+
+/* Search Input Group */
+.search-input-group {
+    display: flex;
+    gap: var(--space-3);
+    background: var(--pure-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-2);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--gray-200);
+    transition: all var(--transition-base);
+}
+
+.search-input-group:focus-within {
+    box-shadow: var(--shadow-xl), 0 0 0 4px rgba(0, 199, 86, 0.1);
+    border-color: var(--primary-500);
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--gray-400);
+    margin-left: var(--space-4);
+    margin-right: var(--space-3);
+    transition: color var(--transition-fast);
+}
+
+.search-input-group:focus-within .search-icon {
+    color: var(--primary-500);
+}
+
+#discSearch {
+    flex: 1;
+    padding: var(--space-4) var(--space-2) var(--space-4) 0;
+    border: none;
+    outline: none;
+    font-size: var(--text-lg);
+    font-weight: 500;
+    color: var(--gray-900);
+    background: transparent;
+    min-width: 0;
+}
+
+#discSearch::placeholder {
+    color: var(--gray-400);
+    font-weight: 400;
+}
+
+.search-button {
+    background: var(--primary-500);
+    color: var(--pure-white);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--text-base);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-width: 120px;
+    justify-content: center;
+}
+
+.search-button:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.search-button:active {
+    transform: translateY(0);
+}
+
+/* Search Dropdown */
+.search-dropdown {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    left: 0;
+    right: 0;
+    background: var(--pure-white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl);
+    z-index: 1000;
+    max-height: 400px;
+    overflow-y: auto;
+    animation: fadeIn var(--transition-fast);
+}
+
+.search-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: var(--radius-sm);
+}
+
+.search-result-item {
+    padding: var(--space-4) var(--space-6);
+    border-bottom: 1px solid var(--gray-100);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-result-item:hover {
+    background-color: var(--primary-50);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.disc-name {
+    font-weight: 600;
+    color: var(--gray-900);
+    font-size: var(--text-base);
+    margin-bottom: var(--space-1);
+}
+
+.disc-details {
+    font-size: var(--text-sm);
+    color: var(--gray-500);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+.flight-numbers {
+    display: flex;
+    gap: var(--space-1);
+    margin-left: var(--space-3);
+}
+
+.flight-number {
+    background: var(--sundial-yellow);
+    color: var(--gray-900);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* Results Section - Compact Layout */
+.results-section {
+    padding: var(--space-8) 0;
+    animation: fadeIn var(--transition-slow);
+}
+
+.results-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-8);
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+/* Selected Disc Panel */
+.selected-disc-panel {
+    background: var(--pure-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+    position: sticky;
+    top: var(--space-6);
+}
+
+.panel-title {
+    font-size: var(--text-xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-2);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.panel-subtitle {
+    font-size: var(--text-sm);
+    color: var(--gray-500);
+    margin-bottom: var(--space-4);
+    font-weight: 500;
+}
+
+/* Compact Disc Card */
+.compact-disc-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+}
+
+.disc-icon {
+    width: 48px;
+    height: 48px;
+    background: conic-gradient(from 0deg, #8B4513, #D2B48C, #CD853F, #DEB887, #8B4513);
+    border-radius: 50%;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.disc-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: var(--pure-white);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.disc-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.disc-name-compact {
+    font-size: var(--text-lg);
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: var(--space-1);
+    font-family: "neue-haas-grotesk-display", sans-serif;
+}
+
+.disc-manufacturer-compact {
+    font-size: var(--text-sm);
+    color: var(--gray-500);
+    margin-bottom: var(--space-3);
+    font-weight: 500;
+}
+
+.flight-numbers-compact {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.flight-number-compact {
+    background: var(--gray-200);
+    color: var(--gray-700);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+}
+
+/* Recommendations Panel */
+.recommendations-panel {
+    background: var(--pure-white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--gray-200);
+}
+
+/* Best Match Compact */
+.best-match-compact {
+    margin-bottom: var(--space-6);
+}
+
+.match-badge-compact {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+    border: 2px solid var(--primary-200);
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--pure-white) 100%);
+}
+
+.match-badge-compact.best {
+    color: var(--primary-700);
+}
+
+.match-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: var(--space-2);
+}
+
+.match-percentage {
+    background: var(--primary-500);
+    color: var(--pure-white);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 700;
+}
+
+/* Recommendation Card Compact */
+.recommendation-card-compact {
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    border: 1px solid var(--gray-200);
+    transition: all var(--transition-fast);
+}
+
+.recommendation-card-compact:hover {
+    background: var(--primary-50);
+    border-color: var(--primary-300);
+    transform: translateY(-1px);
+}
+
+/* Alternative Options */
+.alternatives-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: var(--space-4);
+    font-family: "neue-haas-grotesk-display", sans-serif;
+}
+
+.alternatives-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.alternative-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4);
+    background: var(--gray-50);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-200);
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.alternative-item:hover {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+    transform: translateX(2px);
+}
+
+.alternative-content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1;
+}
+
+.alternative-info {
+    flex: 1;
+}
+
+.alternative-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--gray-900);
+    font-family: "neue-haas-grotesk-display", sans-serif;
+}
+
+.alternative-stats {
+    font-size: var(--text-xs);
+    color: var(--gray-500);
+    margin-top: var(--space-1);
+}
+
+.alternative-match {
+    background: var(--sundial-yellow);
+    color: var(--gray-900);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    margin-right: var(--space-2);
+}
+
+.alternative-arrow {
+    color: var(--gray-400);
+    width: 16px;
+    height: 16px;
+}
+
+/* Disc Card Content */
+.disc-card-header {
+    text-align: center;
+    margin-bottom: var(--space-6);
+}
+
+.disc-card-title {
+    font-size: var(--text-2xl);
+    color: var(--primary-500);
+    margin-bottom: var(--space-2);
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-weight: 600;
+}
+
+.disc-card-manufacturer {
+    font-size: var(--text-sm);
+    color: var(--gray-600);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.flight-display {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin: var(--space-6) 0;
+    padding: var(--space-6);
+    background: var(--gray-50);
+    border-radius: var(--radius-xl);
+}
+
+.flight-stat {
+    text-align: center;
+}
+
+.flight-stat .label {
+    font-size: var(--text-xs);
+    color: var(--gray-500);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: var(--space-2);
+}
+
+.flight-stat .value {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    font-family: "neue-haas-grotesk-display", sans-serif;
+}
+
+.disc-description {
+    color: var(--gray-600);
+    font-size: var(--text-base);
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
+}
+
+.similarity-score {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--sundial-yellow);
+    color: var(--gray-900);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-full);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+}
+
+.shopify-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: var(--primary-500);
+    color: var(--pure-white);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+    justify-content: center;
+    width: 100%;
+}
+
+.shopify-link:hover {
+    background: var(--primary-600);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+    color: var(--pure-white);
+}
+
+/* Additional Utility Classes */
+.search-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 var(--space-4);
+    }
+    
+    .hero {
+        padding: var(--space-16) 0 var(--space-12);
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+    
+    .selected-disc-panel {
+        position: static;
+        order: 1;
+    }
+    
+    .recommendations-panel {
+        order: 2;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: clamp(var(--text-3xl), 10vw, var(--text-5xl));
+    }
+    
+    .hero-subtitle {
+        font-size: var(--text-lg);
+    }
+    
+    .search-section {
+        padding: var(--space-8) 0;
+    }
+    
+    .search-input-group {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .search-button {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .results-section {
+        padding: var(--space-8) 0;
+    }
+    
+    .selected-disc-panel,
+    .recommendations-panel {
+        padding: var(--space-4);
+    }
+    
+    .compact-disc-card {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-3);
+    }
+    
+    .alternative-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+    }
+    
+    .alternative-content {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: var(--space-12) 0 var(--space-8);
+    }
+    
+    .hero-title {
+        font-size: var(--text-3xl);
+        margin-bottom: var(--space-4);
+    }
+    
+    .container {
+        padding: 0 var(--space-3);
+    }
+    
+    .search-wrapper {
+        padding: 0 var(--space-2);
+    }
+    
+    .selected-disc-card,
+    .recommendation-card {
+        padding: var(--space-5);
+    }
+    
+    .flight-stat .value {
+        font-size: var(--text-2xl);
+    }
+    
+    .section-title {
+        font-size: var(--text-xl);
+    }
+    
+    .disc-card-title {
+        font-size: var(--text-xl);
+    }
+}
+
+/* Print Styles */
+@media print {
+    .search-section,
+    .hero {
+        display: none;
+    }
+    
+    .results-section {
+        padding: 0;
+    }
+    
+    .recommendation-card {
+        box-shadow: none;
+        border: 1px solid var(--gray-300);
+        break-inside: avoid;
+    }
+}

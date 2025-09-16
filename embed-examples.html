@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed Examples - Prodigy Disc Comparison Tool</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            line-height: 1.6; 
+        }
+        .example { 
+            margin: 30px 0; 
+            padding: 20px; 
+            border: 1px solid #ddd; 
+            border-radius: 8px; 
+        }
+        .responsive-iframe {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        .responsive-iframe iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Shopify Embed Examples</h1>
+    <p>Here are different ways to embed the Prodigy Disc Comparison Tool in your Shopify store:</p>
+
+    <div class="example">
+        <h2>1. Fixed Height Embed</h2>
+        <p>Simple iframe with fixed dimensions:</p>
+        <pre><code>&lt;iframe 
+  src="https://your-app-name.netlify.app" 
+  width="100%" 
+  height="800px" 
+  frameborder="0"
+  style="border: none; border-radius: 8px;"&gt;
+&lt;/iframe&gt;</code></pre>
+        
+        <h3>Preview:</h3>
+        <iframe 
+            src="http://localhost:8000" 
+            width="100%" 
+            height="600px" 
+            frameborder="0"
+            style="border: 1px solid #ddd; border-radius: 8px;">
+        </iframe>
+    </div>
+
+    <div class="example">
+        <h2>2. Responsive Embed</h2>
+        <p>Maintains aspect ratio across devices:</p>
+        <pre><code>&lt;div class="responsive-iframe"&gt;
+  &lt;iframe 
+    src="https://your-app-name.netlify.app" 
+    frameborder="0"
+    allowfullscreen&gt;
+  &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+.responsive-iframe {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+}
+.responsive-iframe iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
+&lt;/style&gt;</code></pre>
+
+        <h3>Preview:</h3>
+        <div class="responsive-iframe">
+            <iframe 
+                src="http://localhost:8000" 
+                frameborder="0"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>3. Button to Open in New Tab</h2>
+        <p>For when you want to keep users on your main site:</p>
+        <pre><code>&lt;button onclick="openDiscTool()" 
+        style="background: #10B981; color: white; padding: 12px 24px; 
+               border: none; border-radius: 8px; font-size: 16px; 
+               cursor: pointer;"&gt;
+  🥏 Find Your Perfect Prodigy Disc
+&lt;/button&gt;
+
+&lt;script&gt;
+function openDiscTool() {
+  window.open('https://your-app-name.netlify.app', '_blank', 
+              'width=1200,height=800,scrollbars=yes,resizable=yes');
+}
+&lt;/script&gt;</code></pre>
+
+        <h3>Preview:</h3>
+        <button onclick="openDiscTool()" 
+                style="background: #10B981; color: white; padding: 12px 24px; 
+                       border: none; border-radius: 8px; font-size: 16px; 
+                       cursor: pointer;">
+            🥏 Find Your Perfect Prodigy Disc
+        </button>
+    </div>
+
+    <div class="example">
+        <h2>4. Shopify Section Code</h2>
+        <p>For adding to a custom Shopify section (.liquid file):</p>
+        <pre><code>{% comment %} Add this to your section settings {% endcomment %}
+{
+  "name": "Disc Comparison Tool",
+  "settings": [
+    {
+      "type": "text",
+      "id": "app_url",
+      "label": "App URL",
+      "default": "https://your-app-name.netlify.app"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Height (px)",
+      "min": 400,
+      "max": 1000,
+      "step": 50,
+      "default": 700
+    }
+  ]
+}
+
+{% comment %} Section template {% endcomment %}
+&lt;div class="disc-comparison-section"&gt;
+  &lt;iframe 
+    src="{{ section.settings.app_url }}" 
+    width="100%" 
+    height="{{ section.settings.height }}px" 
+    frameborder="0"
+    style="border: none; border-radius: 8px;"&gt;
+  &lt;/iframe&gt;
+&lt;/div&gt;</code></pre>
+    </div>
+
+    <script>
+        function openDiscTool() {
+            window.open('http://localhost:8000', '_blank', 
+                        'width=1200,height=800,scrollbars=yes,resizable=yes');
+        }
+    </script>
+</body>
+</html>
