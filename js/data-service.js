@@ -16,14 +16,13 @@ class DataService {
         
         try {
             // Check if Google Sheets is configured and enabled
-            if (window.AppConfig && window.AppConfig.app.useGoogleSheets && window.AppConfig.isGoogleSheetsConfigured()) {
-                AppConfig.debug('✅ Initializing Google Sheets service...');
+            if (window.AppConfig && window.AppConfig.app.useGoogleSheets && AppConfig.googleSheets.spreadsheetId) {
+                AppConfig.debug('✅ Initializing Public Sheets service (secure)...');
                 
-                this.sheetsService = new GoogleSheetsService(
-                    AppConfig.googleSheets.apiKey,
+                this.sheetsService = new PublicSheetsService(
                     AppConfig.googleSheets.spreadsheetId,
-                    AppConfig.googleSheets.pdgaSheetName,
-                    AppConfig.googleSheets.prodigySheetName
+                    '0', // First sheet (PDGA)
+                    '1'  // Second sheet (Prodigy)
                 );
                 
                 // Validate access first

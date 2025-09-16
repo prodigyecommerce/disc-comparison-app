@@ -2,8 +2,8 @@
 const AppConfig = {
     // Google Sheets Configuration
     googleSheets: {
-        // Replace with your Google Sheets API key
-        apiKey: 'AIzaSyANqSE9NXYTpIAxzZbO8QWayk0oWtxwSp8',
+        // No API key needed for public sheets
+        apiKey: '',
         
         // Replace with your spreadsheet ID (from the URL)
         spreadsheetId: '1Yy9KB1YjXXNLOD1w_ySlFp452UXID29J8zN9aeszp9E',
