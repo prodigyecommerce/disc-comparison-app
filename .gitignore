@@ -13,3 +13,6 @@ yarn-error.log*
 *.swp
 *.swo
 *~
+
+# Generated Shadcn directory (not needed for deployment)
+disc-comparison-app-nextjs/
