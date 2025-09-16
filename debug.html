@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Prodigy Disc Comparison Tool</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5; 
+        }
+        .debug-section { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+        }
+        .status { 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin: 10px 0; 
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        pre { background: #f8f9fa; padding: 15px; border-radius: 4px; overflow-x: auto; }
+        button { 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin: 5px; 
+        }
+        button:hover { background: #0056b3; }
+        #console-output { 
+            max-height: 300px; 
+            overflow-y: auto; 
+            background: #f8f9fa; 
+            padding: 10px; 
+            border-radius: 4px; 
+            white-space: pre-wrap; 
+            font-family: monospace; 
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Console - Disc Comparison Tool</h1>
+    
+    <div class="debug-section">
+        <h2>System Status</h2>
+        <div id="system-status">Checking...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Script Loading</h2>
+        <div id="script-status">Checking...</div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Data Service</h2>
+        <div id="data-status">Checking...</div>
+        <button onclick="testDataService()">Test Data Service</button>
+        <button onclick="testGoogleSheets()">Test Google Sheets</button>
+        <button onclick="testStaticData()">Test Static Data</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Search Function</h2>
+        <div id="search-status">Checking...</div>
+        <input type="text" id="debug-search" placeholder="Test search..." style="padding: 10px; margin: 10px 0; width: 300px;">
+        <button onclick="testSearch()">Test Search</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>Console Output</h2>
+        <div id="console-output"></div>
+        <button onclick="clearConsole()">Clear Console</button>
+    </div>
+
+    <!-- Load all the same scripts as main app -->
+    <script src="js/utils.js"></script>
+    <script src="config.js"></script>
+    <script src="js/google-sheets-service.js"></script>
+    <script src="js/data-service.js"></script>
+    <script src="data/pdga-discs.js"></script>
+    <script src="data/prodigy-discs.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/comparison.js"></script>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        let consoleOutput = '';
+        
+        function logToOutput(level, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(arg => 
+                typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+            ).join(' ');
+            consoleOutput += `[${timestamp}] ${level.toUpperCase()}: ${message}\n`;
+            updateConsoleOutput();
+        }
+        
+        console.log = (...args) => {
+            originalLog(...args);
+            logToOutput('log', ...args);
+        };
+        
+        console.error = (...args) => {
+            originalError(...args);
+            logToOutput('error', ...args);
+        };
+        
+        console.warn = (...args) => {
+            originalWarn(...args);
+            logToOutput('warn', ...args);
+        };
+        
+        function updateConsoleOutput() {
+            document.getElementById('console-output').textContent = consoleOutput;
+        }
+        
+        function clearConsole() {
+            consoleOutput = '';
+            updateConsoleOutput();
+        }
+        
+        function setStatus(elementId, message, type = 'success') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        // System checks
+        function checkSystemStatus() {
+            try {
+                // Check if we're on HTTPS (required for some features)
+                const isHttps = location.protocol === 'https:';
+                const domain = location.hostname;
+                
+                setStatus('system-status', `
+                    Domain: ${domain}<br>
+                    Protocol: ${location.protocol}<br>
+                    HTTPS: ${isHttps ? '✅' : '❌'}<br>
+                    User Agent: ${navigator.userAgent.substring(0, 50)}...
+                `, 'success');
+            } catch (error) {
+                setStatus('system-status', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function checkScriptLoading() {
+            const scripts = [
+                'AppConfig',
+                'GoogleSheetsService', 
+                'window.dataService',
+                'DiscSearch',
+                'DiscComparison',
+                'window.pdgaDiscs',
+                'window.prodigyDiscs'
+            ];
+            
+            let status = '';
+            scripts.forEach(script => {
+                try {
+                    const exists = eval(`typeof ${script} !== 'undefined'`);
+                    status += `${script}: ${exists ? '✅' : '❌'}<br>`;
+                } catch (error) {
+                    status += `${script}: ❌ (${error.message})<br>`;
+                }
+            });
+            
+            setStatus('script-status', status, 'success');
+        }
+        
+        function checkDataService() {
+            try {
+                if (!window.dataService) {
+                    setStatus('data-status', 'Data service not available', 'error');
+                    return;
+                }
+                
+                const status = window.dataService.getStatus();
+                const pdgaCount = window.dataService.getPDGADiscs().length;
+                const prodigyCount = window.dataService.getProdigyDiscs().length;
+                
+                setStatus('data-status', `
+                    Status: ${status}<br>
+                    PDGA Discs: ${pdgaCount}<br>
+                    Prodigy Discs: ${prodigyCount}<br>
+                    Google Sheets Enabled: ${AppConfig.app.useGoogleSheets}<br>
+                    Configured: ${AppConfig.isGoogleSheetsConfigured()}
+                `, pdgaCount > 0 ? 'success' : 'warning');
+            } catch (error) {
+                setStatus('data-status', `Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testDataService() {
+            try {
+                console.log('🔄 Testing data service initialization...');
+                await window.dataService.initialize();
+                checkDataService();
+                console.log('✅ Data service test completed');
+            } catch (error) {
+                console.error('❌ Data service test failed:', error);
+                setStatus('data-status', `Test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testGoogleSheets() {
+            try {
+                console.log('🔄 Testing Google Sheets connection...');
+                if (!AppConfig.isGoogleSheetsConfigured()) {
+                    throw new Error('Google Sheets not configured');
+                }
+                
+                const service = new GoogleSheetsService(
+                    AppConfig.googleSheets.apiKey,
+                    AppConfig.googleSheets.spreadsheetId,
+                    AppConfig.googleSheets.pdgaSheetName,
+                    AppConfig.googleSheets.prodigySheetName
+                );
+                
+                const isValid = await service.validateAccess();
+                console.log('Google Sheets access valid:', isValid);
+                
+                if (isValid) {
+                    const pdgaData = await service.fetchPDGADiscs();
+                    console.log('✅ Google Sheets test successful, loaded', pdgaData.length, 'PDGA discs');
+                } else {
+                    throw new Error('Google Sheets access validation failed');
+                }
+            } catch (error) {
+                console.error('❌ Google Sheets test failed:', error);
+            }
+        }
+        
+        function testStaticData() {
+            try {
+                console.log('🔄 Testing static data...');
+                const pdgaCount = window.pdgaDiscs ? window.pdgaDiscs.length : 0;
+                const prodigyCount = window.prodigyDiscs ? window.prodigyDiscs.length : 0;
+                
+                console.log(`Static PDGA discs: ${pdgaCount}`);
+                console.log(`Static Prodigy discs: ${prodigyCount}`);
+                
+                if (pdgaCount > 0) {
+                    console.log('✅ Static data test successful');
+                } else {
+                    console.warn('⚠️ No static data available');
+                }
+            } catch (error) {
+                console.error('❌ Static data test failed:', error);
+            }
+        }
+        
+        function testSearch() {
+            try {
+                const query = document.getElementById('debug-search').value || 'destroyer';
+                console.log(`🔄 Testing search with query: "${query}"`);
+                
+                const pdgaDiscs = window.dataService.getPDGADiscs();
+                if (pdgaDiscs.length === 0) {
+                    throw new Error('No PDGA discs available for search');
+                }
+                
+                const results = pdgaDiscs.filter(disc => {
+                    const nameMatch = disc.name.toLowerCase().includes(query.toLowerCase());
+                    const manufacturerMatch = disc.manufacturer.toLowerCase().includes(query.toLowerCase());
+                    return nameMatch || manufacturerMatch;
+                }).slice(0, 5);
+                
+                console.log(`Found ${results.length} search results:`, results.map(d => d.name));
+                setStatus('search-status', `Search test successful: ${results.length} results for "${query}"`, 'success');
+            } catch (error) {
+                console.error('❌ Search test failed:', error);
+                setStatus('search-status', `Search test failed: ${error.message}`, 'error');
+            }
+        }
+        
+        // Initialize checks
+        setTimeout(() => {
+            checkSystemStatus();
+            checkScriptLoading();
+            checkDataService();
+        }, 1000);
+        
+        // Auto-refresh data status every 5 seconds
+        setInterval(checkDataService, 5000);
+    </script>
+</body>
+</html>
