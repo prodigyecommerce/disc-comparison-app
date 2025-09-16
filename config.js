@@ -24,7 +24,6 @@ const AppConfig = {
         // Maximum search results to display
         maxSearchResults: 8,
         
-    rentlatcgh
         // Enable debug logging
         debug: true
     },

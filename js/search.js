@@ -1,7 +1,6 @@
 class DiscSearch {
     constructor() {
         this.searchInput = document.getElementById('discSearch');
-        this.searchBtn = document.getElementById('searchBtn');
         this.searchResults = document.getElementById('searchResults');
         this.loadingIndicator = document.getElementById('loadingIndicator');
         this.searchContainer = document.getElementById('searchContainer');
@@ -17,7 +16,13 @@ class DiscSearch {
         this.showLoading();
         
         try {
+            console.log('=== DISC SEARCH INITIALIZATION ===');
             AppConfig.debug('=== DISC SEARCH INITIALIZATION ===');
+            
+            // Check if data service exists
+            if (!window.dataService) {
+                throw new Error('Data service not available');
+            }
             
             // Initialize data service
             await window.dataService.initialize();
@@ -25,13 +30,18 @@ class DiscSearch {
             // Get PDGA disc data
             this.pdgaDiscs = window.dataService.getPDGADiscs();
             
+            console.log('📊 Data service status:', window.dataService.getStatus());
+            console.log('📊 PDGA discs loaded:', this.pdgaDiscs.length);
             AppConfig.debug('📊 Data service status:', window.dataService.getStatus());
             
             this.hideLoading();
             this.initializeEventListeners();
             
             if (this.pdgaDiscs.length === 0) {
+                console.warn('No PDGA disc data available');
                 this.showError('No PDGA disc data available. Please check your configuration.');
+            } else {
+                console.log('✅ Search initialized successfully with', this.pdgaDiscs.length, 'discs');
             }
             
         } catch (error) {
@@ -39,6 +49,8 @@ class DiscSearch {
             
             // Fallback to static data
             this.pdgaDiscs = window.pdgaDiscs || [];
+            console.log('📊 Fallback data loaded:', this.pdgaDiscs.length, 'discs');
+            
             this.hideLoading();
             this.initializeEventListeners();
             
@@ -69,10 +81,6 @@ class DiscSearch {
     initializeEventListeners() {
         this.searchInput.addEventListener('input', (e) => {
             this.handleSearch(e.target.value);
-        });
-        
-        this.searchBtn.addEventListener('click', () => {
-            this.handleSearch(this.searchInput.value);
         });
         
         this.searchInput.addEventListener('keypress', (e) => {
