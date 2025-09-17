@@ -52,31 +52,33 @@ class DiscComparison {
         let weights;
         
         if (typeSimilarity >= 0.85) {
-            // Compatible types (drivers, putters/approach) - prioritize flight numbers
+            // Compatible types (drivers, putters/approach) - use user's importance ratings
+            // Speed: 9/10, Fade: 9/10, Turn: 5/10, Glide: 3/10 (Total: 26)
+            // Converting to percentages: Speed 34.6%, Fade 34.6%, Turn 19.2%, Glide 11.5%
             weights = {
-                type: 0.20,     // Lower type weight for compatible types
-                turn: 0.25,     // Higher weight on flight characteristics
-                speed: 0.20,    
-                fade: 0.20,     
-                glide: 0.15     
+                type: 0.15,     // Lower type weight for compatible types
+                speed: 0.295,   // 34.6% of 85% flight weight = 29.5%
+                fade: 0.295,    // 34.6% of 85% flight weight = 29.5%
+                turn: 0.165,    // 19.2% of 85% flight weight = 16.5%
+                glide: 0.095    // 11.5% of 85% flight weight = 9.5%
             };
         } else if (typeSimilarity >= 0.6) {
-            // Related types - balanced approach
+            // Related types - balanced approach with user's ratings
             weights = {
                 type: 0.30,     
-                turn: 0.22,     
-                speed: 0.18,    
-                fade: 0.18,     
-                glide: 0.12     
+                speed: 0.245,   // 34.6% of 70% flight weight = 24.5%
+                fade: 0.245,    // 34.6% of 70% flight weight = 24.5%
+                turn: 0.135,    // 19.2% of 70% flight weight = 13.5%
+                glide: 0.075    // 11.5% of 70% flight weight = 7.5%
             };
         } else {
-            // Different types - prioritize type matching to avoid bad recommendations
+            // Different types - prioritize type matching but maintain flight number importance
             weights = {
                 type: 0.50,     // High type weight for different categories
-                turn: 0.15,     
-                speed: 0.15,    
-                fade: 0.15,     
-                glide: 0.05     
+                speed: 0.175,   // 34.6% of 50% flight weight = 17.5%
+                fade: 0.175,    // 34.6% of 50% flight weight = 17.5%
+                turn: 0.095,    // 19.2% of 50% flight weight = 9.5%
+                glide: 0.055    // 11.5% of 50% flight weight = 5.5%
             };
         }
         
@@ -322,21 +324,21 @@ class DiscComparison {
             explanations.push("Cross-category match");
         }
         
-        // Flight number comparisons
+        // Flight number comparisons (ordered by importance: Speed=9, Fade=9, Turn=5, Glide=3)
         if (Math.abs(disc1.speed - disc2.speed) <= 1) {
-            explanations.push("Similar speed for comparable distance potential");
-        }
-        
-        if (Math.abs(disc1.turn - disc2.turn) <= 0.5) {
-            explanations.push("Similar turn behavior during flight");
+            explanations.push("Excellent speed match for similar distance potential");
         }
         
         if (Math.abs(disc1.fade - disc2.fade) <= 0.5) {
-            explanations.push("Comparable fade at the end of flight");
+            explanations.push("Excellent fade match for similar landing behavior");
+        }
+        
+        if (Math.abs(disc1.turn - disc2.turn) <= 0.5) {
+            explanations.push("Good turn behavior match during flight");
         }
         
         if (Math.abs(disc1.glide - disc2.glide) <= 1) {
-            explanations.push("Comparable glide characteristics");
+            explanations.push("Similar glide characteristics");
         }
         
         return explanations.length > 0 ? explanations.join(". ") : "Different characteristics but still a viable alternative";
