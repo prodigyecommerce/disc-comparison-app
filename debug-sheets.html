@@ -29,7 +29,7 @@
                 }
                 
                 // Test Sheet2 (Prodigy - try different GIDs)
-                for (let gid of ['1', '2', '1808693328', '0']) {
+                for (let gid of ['1181004517', '1', '2', '0']) {
                     console.log(`Testing Sheet2 with GID=${gid}...`);
                     const sheet2Url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}`;
                     const response2 = await fetch(sheet2Url);

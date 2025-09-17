@@ -22,7 +22,7 @@ class DataService {
                 this.sheetsService = new PublicSheetsService(
                     AppConfig.googleSheets.spreadsheetId,
                     '0', // First sheet (PDGA)
-                    '1'  // Second sheet (Prodigy)
+                    '1181004517'  // Second sheet (Prodigy) - correct GID
                 );
                 
                 // Validate access first
