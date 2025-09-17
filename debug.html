@@ -84,7 +84,7 @@
     <!-- Load all the same scripts as main app -->
     <script src="js/utils.js"></script>
     <script src="config.js"></script>
-    <script src="js/google-sheets-service.js"></script>
+    <script src="js/public-sheets-service.js"></script>
     <script src="js/data-service.js"></script>
     <script src="data/pdga-discs.js"></script>
     <script src="data/prodigy-discs.js"></script>
@@ -158,7 +158,7 @@
         function checkScriptLoading() {
             const scripts = [
                 'AppConfig',
-                'GoogleSheetsService', 
+                'PublicSheetsService', 
                 'window.dataService',
                 'DiscSearch',
                 'DiscComparison',
@@ -195,7 +195,7 @@
                     PDGA Discs: ${pdgaCount}<br>
                     Prodigy Discs: ${prodigyCount}<br>
                     Google Sheets Enabled: ${AppConfig.app.useGoogleSheets}<br>
-                    Configured: ${AppConfig.isGoogleSheetsConfigured()}
+                    Spreadsheet ID: ${AppConfig.googleSheets.spreadsheetId ? '✅' : '❌'}
                 `, pdgaCount > 0 ? 'success' : 'warning');
             } catch (error) {
                 setStatus('data-status', `Error: ${error.message}`, 'error');
@@ -216,29 +216,31 @@
         
         async function testGoogleSheets() {
             try {
-                console.log('🔄 Testing Google Sheets connection...');
-                if (!AppConfig.isGoogleSheetsConfigured()) {
+                console.log('🔄 Testing Public Sheets connection...');
+                if (!AppConfig.googleSheets.spreadsheetId) {
                     throw new Error('Google Sheets not configured');
                 }
                 
-                const service = new GoogleSheetsService(
-                    AppConfig.googleSheets.apiKey,
+                const service = new PublicSheetsService(
                     AppConfig.googleSheets.spreadsheetId,
-                    AppConfig.googleSheets.pdgaSheetName,
-                    AppConfig.googleSheets.prodigySheetName
+                    '0', // PDGA sheet
+                    '1'  // Prodigy sheet
                 );
                 
                 const isValid = await service.validateAccess();
-                console.log('Google Sheets access valid:', isValid);
+                console.log('Public Sheets access valid:', isValid);
                 
                 if (isValid) {
                     const pdgaData = await service.fetchPDGADiscs();
-                    console.log('✅ Google Sheets test successful, loaded', pdgaData.length, 'PDGA discs');
+                    console.log('✅ PDGA data loaded:', pdgaData.length, 'discs');
+                    
+                    const prodigyData = await service.fetchProdigyDiscs();
+                    console.log('✅ Prodigy data loaded:', prodigyData.length, 'discs');
                 } else {
-                    throw new Error('Google Sheets access validation failed');
+                    throw new Error('Public Sheets access validation failed');
                 }
             } catch (error) {
-                console.error('❌ Google Sheets test failed:', error);
+                console.error('❌ Public Sheets test failed:', error);
             }
         }
         
