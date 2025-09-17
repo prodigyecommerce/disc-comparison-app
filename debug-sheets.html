@@ -1,84 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Google Sheets Debug</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Google Sheets</title>
 </head>
 <body>
-    <h1>Google Sheets API Debug</h1>
-    <button onclick="testSheetsAPI()">Test Google Sheets API</button>
-    <div id="result"></div>
-
+    <h1>Debug Google Sheets Access</h1>
+    <div id="output"></div>
+    
     <script>
-        async function testSheetsAPI() {
-            const apiKey = 'AIzaSyANqSE9NXYTpIAxzZbO8QWayk0oWtxwSp8';
-            const spreadsheetId = '1Yy9KB1YjXXNLOD1w_ySlFp452UXID29J8zN9aeszp9E';
-            const sheetName = 'Sheet1';
-            const range = `${sheetName}!A:G`;
-            
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-            
-            document.getElementById('result').innerHTML = 'Testing API...';
+        const SPREADSHEET_ID = '1Yy9KB1YjXXNLOD1w_ySlFp452UXID29J8zN9aeszp9E';
+        
+        async function testSheetAccess() {
+            const output = document.getElementById('output');
             
             try {
-                console.log('Testing URL:', url);
-                const response = await fetch(url);
-                console.log('Response status:', response.status);
-                console.log('Response headers:', [...response.headers.entries()]);
+                // Test Sheet1 (PDGA - should be GID 0)
+                console.log('Testing Sheet1 (PDGA)...');
+                const sheet1Url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+                const response1 = await fetch(sheet1Url);
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                if (response1.ok) {
+                    const csvText1 = await response1.text();
+                    output.innerHTML += `<h2>Sheet1 (GID=0) - SUCCESS</h2><pre>${csvText1.substring(0, 500)}...</pre>`;
+                } else {
+                    output.innerHTML += `<h2>Sheet1 (GID=0) - FAILED</h2><p>Status: ${response1.status}</p>`;
                 }
                 
-                const data = await response.json();
-                console.log('API Response:', data);
-                
-                document.getElementById('result').innerHTML = `
-                    <h3>✅ Success!</h3>
-                    <p>Found ${data.values ? data.values.length : 0} rows</p>
-                    <pre>${JSON.stringify(data, null, 2)}</pre>
-                `;
+                // Test Sheet2 (Prodigy - try different GIDs)
+                for (let gid of ['1', '2', '1808693328', '0']) {
+                    console.log(`Testing Sheet2 with GID=${gid}...`);
+                    const sheet2Url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}`;
+                    const response2 = await fetch(sheet2Url);
+                    
+                    if (response2.ok) {
+                        const csvText2 = await response2.text();
+                        output.innerHTML += `<h2>Sheet2 (GID=${gid}) - SUCCESS</h2><pre>${csvText2.substring(0, 500)}...</pre>`;
+                        break; // Stop on first success
+                    } else {
+                        output.innerHTML += `<h2>Sheet2 (GID=${gid}) - FAILED</h2><p>Status: ${response2.status}</p>`;
+                    }
+                }
                 
             } catch (error) {
-                console.error('API Error:', error);
-                document.getElementById('result').innerHTML = `
-                    <h3>❌ Error</h3>
-                    <p>${error.message}</p>
-                    <p>Check the browser console for more details.</p>
-                    <h4>Common Issues:</h4>
-                    <ul>
-                        <li>Spreadsheet is not public (must be "Anyone with the link can view")</li>
-                        <li>Sheet name doesn't match (case sensitive)</li>
-                        <li>API key is invalid or restricted</li>
-                        <li>Spreadsheet ID is incorrect</li>
-                    </ul>
-                `;
+                output.innerHTML += `<h2>ERROR</h2><p>${error.message}</p>`;
             }
         }
         
-        // Also test access to the spreadsheet itself
-        async function testSpreadsheetAccess() {
-            const apiKey = 'AIzaSyANqSE9NXYTpIAxzZbO8QWayk0oWtxwSp8';
-            const spreadsheetId = '1Yy9KB1YjXXNLOD1w_ySlFp452UXID29J8zN9aeszp9E';
-            
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}?key=${apiKey}`;
-            
-            try {
-                const response = await fetch(url);
-                console.log('Spreadsheet access test:', response.status);
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Available sheets:', data.sheets?.map(s => s.properties.title));
-                    return data.sheets?.map(s => s.properties.title) || [];
-                }
-            } catch (error) {
-                console.error('Spreadsheet access error:', error);
-            }
-            return [];
-        }
-        
-        // Run spreadsheet access test on load
-        testSpreadsheetAccess();
+        testSheetAccess();
     </script>
 </body>
 </html>
