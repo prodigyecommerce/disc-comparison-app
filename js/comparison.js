@@ -77,47 +77,55 @@ class DiscComparison {
     
     calculateTypeSimilarity(type1, type2) {
         // Normalize type names for comparison
-        const normalizeType = (type) => type.toLowerCase().replace(/\s+/g, '');
+        const normalizeType = (type) => type.toLowerCase().replace(/\s+/g, '').replace(/[\/\-]/g, '');
         const norm1 = normalizeType(type1);
         const norm2 = normalizeType(type2);
         
         // Exact match
         if (norm1 === norm2) return 1.0;
         
-        // Define type compatibility groups
+        // Define type compatibility groups with more specific matching
         const typeGroups = {
-            drivers: ['distancedriver', 'fairwaydriver', 'driver'],
-            midrange: ['midrange', 'mid', 'approach'],
-            putters: ['putter', 'putting', 'approach']
+            // All driver types can match each other based on flight numbers
+            drivers: {
+                keywords: ['distancedriver', 'fairwaydriver', 'hybridcontroldriver', 'driver', 'hybrid', 'control'],
+                compatibility: 0.85  // High compatibility - focus on flight numbers
+            },
+            // Midrange discs
+            midrange: {
+                keywords: ['midrangedisc', 'midrange', 'mid'],
+                compatibility: 0.9
+            },
+            // Putters and approach discs can match each other
+            puttersapproach: {
+                keywords: ['putter', 'putting', 'approachdisc', 'approach'],
+                compatibility: 0.85  // High compatibility between putters and approach
+            }
         };
         
         // Check if both types are in the same group
-        for (const [groupName, types] of Object.entries(typeGroups)) {
-            const type1InGroup = types.some(t => norm1.includes(t) || t.includes(norm1));
-            const type2InGroup = types.some(t => norm2.includes(t) || t.includes(norm2));
+        for (const [groupName, groupData] of Object.entries(typeGroups)) {
+            const type1InGroup = groupData.keywords.some(keyword => 
+                norm1.includes(keyword) || keyword.includes(norm1)
+            );
+            const type2InGroup = groupData.keywords.some(keyword => 
+                norm2.includes(keyword) || keyword.includes(norm2)
+            );
             
             if (type1InGroup && type2InGroup) {
-                // Same group but different subtypes
-                if (groupName === 'drivers') {
-                    // Distance drivers vs fairway drivers are similar but not identical
-                    return 0.7;
-                } else if (groupName === 'midrange') {
-                    // Midrange and approach are very similar
-                    return 0.8;
-                } else {
-                    // Putters group
-                    return 0.8;
-                }
+                // Same group - return the group's compatibility score
+                return groupData.compatibility;
             }
         }
         
-        // Special cases for related types
+        // Special cases for cross-group compatibility
+        // Approach discs can somewhat match with midrange
         if ((norm1.includes('approach') && norm2.includes('midrange')) || 
             (norm1.includes('midrange') && norm2.includes('approach'))) {
             return 0.6;
         }
         
-        // Completely different types
+        // Completely different types (e.g., driver vs putter)
         return 0.0;
     }
     
@@ -284,10 +292,12 @@ class DiscComparison {
         const typeSimilarity = this.calculateTypeSimilarity(disc1.type, disc2.type);
         if (typeSimilarity === 1.0) {
             explanations.push("Exact disc type match");
-        } else if (typeSimilarity >= 0.7) {
-            explanations.push("Similar disc type category");
-        } else if (typeSimilarity >= 0.5) {
-            explanations.push("Related disc type");
+        } else if (typeSimilarity >= 0.85) {
+            explanations.push("Compatible disc type - optimized for flight numbers");
+        } else if (typeSimilarity >= 0.6) {
+            explanations.push("Related disc type category");
+        } else if (typeSimilarity > 0) {
+            explanations.push("Cross-category match");
         }
         
         // Flight number comparisons
