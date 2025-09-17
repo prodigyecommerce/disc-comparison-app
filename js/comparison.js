@@ -45,18 +45,40 @@ class DiscComparison {
     }
     
     calculateSimilarity(disc1, disc2) {
-        // Weight factors for different characteristics
-        // Type matching is most important - you don't want putter recommendations for drivers!
-        const weights = {
-            type: 0.40,     // Highest priority - disc type must be similar
-            turn: 0.20,     // Turn is very important for flight behavior
-            speed: 0.15,    // Speed determines throw requirements
-            fade: 0.15,     // Fade affects landing behavior
-            glide: 0.10     // Glide is least critical for matching
-        };
-        
-        // Calculate type similarity (exact match gets full points, related types get partial)
+        // Calculate type similarity first to determine weighting strategy
         const typeSimilarity = this.calculateTypeSimilarity(disc1.type, disc2.type);
+        
+        // Dynamic weight factors based on type compatibility
+        let weights;
+        
+        if (typeSimilarity >= 0.85) {
+            // Compatible types (drivers, putters/approach) - prioritize flight numbers
+            weights = {
+                type: 0.20,     // Lower type weight for compatible types
+                turn: 0.25,     // Higher weight on flight characteristics
+                speed: 0.20,    
+                fade: 0.20,     
+                glide: 0.15     
+            };
+        } else if (typeSimilarity >= 0.6) {
+            // Related types - balanced approach
+            weights = {
+                type: 0.30,     
+                turn: 0.22,     
+                speed: 0.18,    
+                fade: 0.18,     
+                glide: 0.12     
+            };
+        } else {
+            // Different types - prioritize type matching to avoid bad recommendations
+            weights = {
+                type: 0.50,     // High type weight for different categories
+                turn: 0.15,     
+                speed: 0.15,    
+                fade: 0.15,     
+                glide: 0.05     
+            };
+        }
         
         // Calculate normalized differences (0-1 scale where 0 = identical, 1 = max difference)
         const speedDiff = Math.abs(disc1.speed - disc2.speed) / 14; // Max speed is ~14
