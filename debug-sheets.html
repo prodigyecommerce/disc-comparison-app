@@ -39,7 +39,8 @@
                         output.innerHTML += `<h2>Sheet2 (GID=${gid}) - SUCCESS</h2><pre>${csvText2.substring(0, 500)}...</pre>`;
                         break; // Stop on first success
                     } else {
-                        output.innerHTML += `<h2>Sheet2 (GID=${gid}) - FAILED</h2><p>Status: ${response2.status}</p>`;
+                        const errorText = await response2.text();
+                        output.innerHTML += `<h2>Sheet2 (GID=${gid}) - FAILED</h2><p>Status: ${response2.status}</p><p>Error: ${errorText.substring(0, 200)}</p>`;
                     }
                 }
                 
